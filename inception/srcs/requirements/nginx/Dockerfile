@@ -6,7 +6,7 @@ RUN  apt-get update &&\
 	-keyout /etc/ssl/private/selfsigned.key -out /etc/ssl/certs/selfsigned.crt \
 	-subj "/CN=rgatnaou/O=1337.ma/L=KHOURIBGA/C=MA"
 
-# COPY ./conf/nginx.conf /etc/nginx
+COPY ./conf/nginx.conf /etc/nginx
 
 EXPOSE	443
 

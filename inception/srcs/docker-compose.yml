@@ -44,6 +44,8 @@ services:
       - 443:443
     depends_on:
       - wordpress
+    env_file:
+      - .env
     volumes:
       - wp:/var/www/html
     restart: on-failure

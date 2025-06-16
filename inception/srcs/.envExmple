@@ -1,0 +1,21 @@
+DOMAIN_NAME=rgatnaou.42.fr
+
+#mariadb env
+MARIADB_ROOT_PASSWORD=1234
+MARIADB_DATABASE=wordpress
+MARIADB_USER=wordpress
+MARIADB_PASSWORD=1234
+
+#wordpress env
+TITLE=inception
+    # wp admin
+    WP_ADMIN_USER=rgatnaou
+    WP_ADMIN_PASS=1234
+    WP_ADMIN_EMAIL=rgatnaou@gmail.com
+
+    # wp user
+    WP_USER=redouane
+    WP_PASS=12345
+    WP_EMAIL=redouane@gmail.com
+
+
