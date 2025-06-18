@@ -1,0 +1,76 @@
+- name: deploy app
+  hosts: virtual
+  become: true
+  gather_facts: true
+  vars:
+    ansible_python_interpreter: auto_silent
+  tasks:
+    - name: ping the host
+      ping:
+
+    - name: ensure apt cache is up to date
+      apt:
+        update_cache: true
+
+    # - name: Install required packages
+    #   ansible.builtin.apt:
+    #     name:
+    #       - apt-transport-https
+    #       - ca-certificates
+    #       - curl
+    #       - gnupg-agent
+    #       - software-properties-common
+    #     state: present
+
+    # - name: Download Docker GPG key
+    #   get_url:
+    #     url: https://download.docker.com/linux/ubuntu/gpg
+    #     dest: /etc/apt/keyrings/docker.asc
+    #     mode: '0644'
+
+    # - name: Add Docker Repository
+    #   ansible.builtin.apt_repository:
+    #     repo: "deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ubuntu_version.stdout }} stable"
+    #     state: present
+    #     filename: docker
+
+    # - name: Update apt and install docker
+    #   ansible.builtin.apt:
+    #     name:
+    #       - docker-ce
+    #       - docker-ce-cli
+    #       - containerd.io
+    #       - docker-buildx-plugin
+    #       - docker-compose-plugin
+    #     state: present
+    #     update_cache: yes
+
+
+    # - name: Start and enable Docker service
+    #   service:
+    #     name: docker
+    #     state: started
+    #     enabled: yes
+
+    - name: copy dir inception
+      copy:
+        src: ../inception/
+        dest: /tmp/inception/
+
+    - name: chek if docker-compose is installed
+      command: docker-compose --version
+      register: docker_compose_version
+      ignore_errors: true
+    
+    - name: run docker-compose
+      command: docker-compose up -d 
+      args:
+        chdir: /tmp/inception/srcs
+      when: docker_compose_version is defined
+
+    - name: check if all containers are running
+      command: docker ps
+      register: docker_ps_output
+      until: docker_ps_output.stdout | length > 0
+      retries: 5
+      delay: 5

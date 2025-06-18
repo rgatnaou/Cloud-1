@@ -17,6 +17,7 @@ if [ ! -f "$FLAG_FILE" ]; then
 
     # Setup wp-config.php if it doesn't exist
     if [ ! -f wp-config.php ]; then
+        echo "* Creating wp-config.php..."
         cp wp-config-sample.php wp-config.php
 
         sed -i -r "s/database_name_here/$MARIADB_DATABASE/" wp-config.php
@@ -25,25 +26,28 @@ if [ ! -f "$FLAG_FILE" ]; then
         sed -i -r "s/localhost/mariadb/" wp-config.php
     fi
 
-    # Download wp-cli only once
-    if ! command -v wp >/dev/null 2>&1; then
-        wget -q https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-        chmod +x wp-cli.phar
-        mv wp-cli.phar /usr/local/bin/wp
-    fi
-
     touch "$FLAG_FILE"
 else
     echo "WordPress already installed, skipping setup."
 fi
 
-# Wait for MariaDB to be ready
+# Ensure wp-cli is installed (download if missing)
+if ! command -v wp >/dev/null 2>&1; then
+    echo "* Downloading wp-cli..."
+    wget -q https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    chmod +x wp-cli.phar
+    mv wp-cli.phar /usr/local/bin/wp
+fi
+
+# Wait for MariaDB to accept connections with correct credentials
 echo "Waiting for MariaDB to be ready..."
-until mysqladmin ping -h"mariadb" --silent; do
+until mysql -h mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" -e "SELECT 1" &>/dev/null; do
     echo "MariaDB is unavailable - sleeping"
-    sleep 2
+    sleep 6
 done
 echo "MariaDB is up!"
+
+
 
 # Configure WordPress via wp-cli if not installed
 if ! wp core is-installed --allow-root; then

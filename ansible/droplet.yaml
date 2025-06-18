@@ -1,29 +1,18 @@
----
-- name: Create SSH key and Droplet
+- name: Create a DigitalOcean Droplet
   hosts: localhost
-  connection: local
-  gather_facts: true
-
-  vars:
-    digitalocean_token: "{{ lookup('ansible.builtin.env', 'DIGITALOCEAN_TOKEN') }}"
-    public_key: "{{ lookup('ansible.builtin.file', ansible_env['HOME'] ~ '/.ssh/sammy.key.pub') }}"
-
+  gather_facts: no
   tasks:
-    - name: Create SSH key
-      digitalocean.cloud.ssh_key:
+    - name: Create a DigitalOcean Droplet
+      community.digitalocean.digital_ocean_droplet:
+        name: my-new-droplet
         state: present
-        token: "{{ digitalocean_token }}"
-        public_key: "{{ public_key }}"
-        name: "sammy"
-      register: ssh_key
-
-    - name: Create Droplet
-      digitalocean.cloud.droplet:
-        state: present
-        token: "{{ digitalocean_token }}"
-        name: sammy-droplet
-        region: nyc3
-        size: s-1vcpu-2gb
-        image: ubuntu-22-04-x64
-        ssh_keys: ["{{ ssh_key.ssh_key.id }}"]
-        unique_name: true
+        api_token: "{{ lookup('env', 'DO_API_TOKEN') }}"  # Use the environment variable
+        size: s-1vcpu-1gb
+        image: ubuntu-20-04-x64
+        region: nyc1
+        ssh_keys:
+          - "{{ lookup('env', 'DO_SSH_KEY_ID') }}"  # Use the environment variable for SSH key ID
+        tags:
+          - "web"
+        wait: yes
+      register: do_droplet

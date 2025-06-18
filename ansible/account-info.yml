@@ -1,8 +1,25 @@
 ---
-- name: Account info
+- name: Get DigitalOcean Droplet IP Address
   hosts: localhost
-  connection: local
-  gather_facts: false
+  gather_facts: no
+  vars:
+    droplet_name: my-new-droplet  # Replace this with your droplet's name
+
   tasks:
-    - name: Get account information
-      digitalocean.cloud.account_info:
+    - name: Fetch droplet IP address using doctl
+      command: "doctl compute droplet list --format Name,PublicIPv4 --no-header"
+      register: droplet_info
+
+    - name: Filter IP address for droplet name
+      set_fact:
+        droplet_ip: "{{ droplet_info.stdout_lines | select('match', droplet_name) | first | split() | last }}"
+
+    - name: Display the Droplet IP address
+      debug:
+        msg: "Droplet IP address: {{ droplet_ip }}"
+
+    - name: add Droplet IP address to a file
+      copy:
+        content: "{{ droplet_ip }}"
+        dest: "./droplet_ip.txt"
+      when: droplet_ip is defined

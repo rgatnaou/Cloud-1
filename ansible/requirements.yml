@@ -1,2 +1,4 @@
 collections:
   - name: digitalocean.cloud
+  - name: community.digitalocean
+  - name: 

@@ -4,14 +4,14 @@ volumes:
     name: Wordpress
     driver: local
     driver_opts:
-      device : /home/rgatnaou/data/Wordpress
+      device : ./data/Wordpress
       o : bind
       type : none
   db:
     name: DB
     driver: local
     driver_opts:
-      device : /home/rgatnaou/data/DB
+      device : ./data/DB
       o : bind
       type : none
 

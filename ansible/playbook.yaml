@@ -2,18 +2,35 @@
 - name: Create a DigitalOcean Droplet
   hosts: localhost
   gather_facts: no
+  vars:
+    droplet_name: "my-new-droplet"  # Replace this with your droplet's name
+    droplet_size: "s-1vcpu-1gb"
+    droplet_image: "ubuntu-20-04-x64"
+    droplet_region: "nyc1"
+    droplet_tags: ["web"]
+  
   tasks:
     - name: Create a DigitalOcean Droplet
       community.digitalocean.digital_ocean_droplet:
-        name: my-new-droplet
+        name: "{{ droplet_name }}"
         state: present
         api_token: "{{ lookup('env', 'DO_API_TOKEN') }}"  # Use the environment variable
-        size: s-1vcpu-1gb
-        image: ubuntu-20-04-x64
-        region: nyc1
+        size: "{{ droplet_size }}"
+        image: "{{ droplet_image }}"
+        region: "{{ droplet_region }}"
         ssh_keys:
-          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDzjrZemyJHcAlXsfDztroOa4tTsv6F2b+o77KdNkkMiEyYbn8Pn4kxcWT298uucoDFAUWVL307Om3vr5BDiOZONCPro8/vBY2WfQ+IyXpB+W5HiRQ2e2vCJzdQq3J97serCcwAwTIOiN7QpmXLj6g+tIRuuqqUSi5z+vA/qOIxVWjTGkjcyMSNEp2MzJjZmOD4j9/6a9o2Urtu4Wpt1f1rvC4Y3lnyFw8nygXpU6SN/9Z2b0euLNIBrStuV9QdoQvaZ7+MpSep+cxrcVAWP6ADDEnvKMk9/O28UsItACrvrWdCPVGOblohnfspO+iL874NvrPkjXKDPTQeQCsdL9O2UU/20JrIjnLHYR9Oi2QT/23TAz47NRhLk7Vb14i2Aqq/bFG6BO1p7XJww1HB9Ju1vIs+YJwDMjFRbYKy2ZO5GQG36qsnt6d5bsxujBVG2gLmD16B2Ep7PsenOL6nNOQfgeKOPS2qDBLUYEO6YcFH24ZkcL6Zvuv1zMUZdgYAa4U= rgatnaou@e2r4p5.1337.ma"
-        tags:
-          - "web"
+          - "{{ lookup('env', 'DO_SSH_KEY_ID') }}"  # Use the environment variable for SSH key ID
+        tags: "{{ droplet_tags }}"
         wait: yes
+        wait_timeout: 100  # Increased timeout to 5 minutes
+      register: do_droplet
 
+    - name: Display the Droplet IP address
+      debug:
+        var: do_droplet.data.droplet.networks.v4[0].ip_address
+    
+    - name: copy ip_address
+      copy:
+        content: "{{ do_droplet.data.droplet.networks.v4[0].ip_address }}"
+        dest: ./droplet_ip.txt // bla mdirha , ghi fri3 ras 7it mtalbinhach
+      delegate_to: localhost
