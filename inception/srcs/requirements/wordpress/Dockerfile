@@ -1,9 +1,9 @@
 # FROM  debian:buster
-FROM  wordpress:php8.2-fpm
+FROM  wordpress:php8.2-fpm-alpine
 
-RUN apt-get update && \
-    apt-get install -y  wget unzip curl less mariadb-client  default-mysql-client && \
-    apt-get clean
+RUN apk update && \
+    apk add --no-cache wget unzip curl less mariadb-client && \
+    rm -rf /var/cache/apk/*
 
 
 COPY tools/script.sh /
