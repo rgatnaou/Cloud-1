@@ -6,13 +6,13 @@ down:
 
 clean: down
 	docker volume rm DB Wordpress
-	sudo rm -rf /home/rgatnaou/data
+	sudo rm -rf srcs/data
 
 mkdir: 
-	mkdir -p /home/rgatnaou/data/DB
-	mkdir -p /home/rgatnaou/data/Wordpress
+	mkdir -p srcs/data/DB
+	mkdir -p srcs/data/Wordpress
 	
 rm:down
-	sudo rm -rf /home/rgatnaou/data/DB/*
-	sudo rm -rf /home/rgatnaou/data/Wordpress/*
+	sudo rm -rf srcs/data/DB/*
+	sudo rm -rf srcs/data/Wordpress/*
 re: rm up

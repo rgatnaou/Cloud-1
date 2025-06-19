@@ -18,7 +18,7 @@ volumes:
 services:
   mariadb:
     build: requirements/mariadb/.
-    image: mariadb:1337
+    image: mariadb:jnljn
     container_name: mariadb
     env_file:
       - .env

@@ -1,13 +1,15 @@
-FROM  debian:buster
+# FROM  debian:buster
+FROM  wordpress:php8.2-fpm
 
 RUN apt-get update && \
-    apt-get install -y php-curl php-fpm php-mysql wget unzip curl less mariadb-client  default-mysql-client && \
+    apt-get install -y  wget unzip curl less mariadb-client  default-mysql-client && \
     apt-get clean
 
 
 COPY tools/script.sh /
 #COPY tools/wp-config.php  /var/www/html/wp-config.php
 
+RUN echo "memory_limit = 500M" >> /usr/local/etc/php/conf.d/memory-limit.ini
 RUN chmod 777 /script.sh
 # RUN chmod 777 /var/www/html/wp-config.php
 

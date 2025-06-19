@@ -1,76 +1,63 @@
 - name: deploy app
-  hosts: virtual
+  hosts: virtual1
   become: true
-  gather_facts: true
-  vars:
-    ansible_python_interpreter: auto_silent
   tasks:
-    - name: ping the host
-      ping:
+    # - name: Ping the host
+    #   ping:
 
-    - name: ensure apt cache is up to date
-      apt:
-        update_cache: true
+    # - name: Ensure apt cache is up to date
+    #   apt:
+    #     update_cache: true
 
-    # - name: Install required packages
-    #   ansible.builtin.apt:
+    # - name: Install prerequisite packages
+    #   apt:
     #     name:
     #       - apt-transport-https
     #       - ca-certificates
     #       - curl
-    #       - gnupg-agent
     #       - software-properties-common
     #     state: present
 
-    # - name: Download Docker GPG key
-    #   get_url:
+    # - name: Add Docker GPG key
+    #   apt_key:
     #     url: https://download.docker.com/linux/ubuntu/gpg
-    #     dest: /etc/apt/keyrings/docker.asc
-    #     mode: '0644'
-
-    # - name: Add Docker Repository
-    #   ansible.builtin.apt_repository:
-    #     repo: "deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ubuntu_version.stdout }} stable"
     #     state: present
-    #     filename: docker
 
-    # - name: Update apt and install docker
-    #   ansible.builtin.apt:
-    #     name:
-    #       - docker-ce
-    #       - docker-ce-cli
-    #       - containerd.io
-    #       - docker-buildx-plugin
-    #       - docker-compose-plugin
+    # - name: Add Docker repository
+    #   apt_repository:
+    #     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
     #     state: present
-    #     update_cache: yes
+    #     update_cache: true
 
+    # - name: Install Docker
+    #   apt:
+    #     name: docker-ce
+    #     state: present
 
-    # - name: Start and enable Docker service
+    # - name: Ensure Docker service is running
     #   service:
     #     name: docker
     #     state: started
-    #     enabled: yes
+    #     enabled: true
 
-    - name: copy dir inception
+    - name: Copy dir inception
       copy:
         src: ../inception/
         dest: /tmp/inception/
 
-    - name: chek if docker-compose is installed
-      command: docker-compose --version
-      register: docker_compose_version
-      ignore_errors: true
+    - name: create directory database
+      file:
+        path: /tmp/inception/srcs/data/DB
+        state: directory
+        mode: '0755'
     
-    - name: run docker-compose
-      command: docker-compose up -d 
-      args:
-        chdir: /tmp/inception/srcs
-      when: docker_compose_version is defined
+    - name: create dir wordpress
+      file:
+        path: /tmp/inception/srcs/data/Wordpress
+        state: directory
+        mode: '0755'
 
-    - name: check if all containers are running
-      command: docker ps
-      register: docker_ps_output
-      until: docker_ps_output.stdout | length > 0
-      retries: 5
-      delay: 5
+    # - name: Run docker compose
+    #   command: docker compose up -d
+    #   args:
+    #     chdir: /tmp/inception/srcs

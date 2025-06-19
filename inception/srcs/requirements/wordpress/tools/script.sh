@@ -7,13 +7,44 @@ FLAG_FILE="$WWW_DIR/.wordpress_installed"
 mkdir -p "$WWW_DIR"
 cd "$WWW_DIR"
 
-# Only download and extract WordPress if not already done
-if [ ! -f "$FLAG_FILE" ]; then
-    echo "Downloading and extracting WordPress..."
-    wget -q https://wordpress.org/latest.tar.gz
-    tar xzf latest.tar.gz
-    mv -f wordpress/* .
-    rm -rf latest.tar.gz wordpress
+# # Only download and extract WordPress if not already done
+# if [ ! -f "$FLAG_FILE" ]; then
+#     echo "Downloading and extracting WordPress..."
+#     wget -q https://wordpress.org/latest.tar.gz
+#     tar xzf latest.tar.gz
+#     mv -f wordpress/* .
+#     rm -rf latest.tar.gz wordpress
+
+#     # Setup wp-config.php if it doesn't exist
+#     if [ ! -f wp-config.php ]; then
+#         echo "* Creating wp-config.php..."
+#         cp wp-config-sample.php wp-config.php
+
+#         sed -i -r "s/database_name_here/$MARIADB_DATABASE/" wp-config.php
+#         sed -i -r "s/username_here/$MARIADB_USER/" wp-config.php
+#         sed -i -r "s/password_here/$MARIADB_PASSWORD/" wp-config.php
+#         sed -i -r "s/localhost/mariadb/" wp-config.php
+#     fi
+
+#     touch "$FLAG_FILE"
+# else
+#     echo "WordPress already installed, skipping setup."
+# fi
+
+# Ensure wp-cli is installed (download if missing)
+if ! command -v wp >/dev/null 2>&1; then
+    echo "* Downloading wp-cli..."
+    wget -q https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    chmod +x wp-cli.phar
+    mv wp-cli.phar /usr/local/bin/wp
+    
+fi
+
+# Check if WordPress core files exist, if not download them
+if [ ! -f "wp-login.php" ]; then
+    echo "WordPress files not found. Downloading WordPress..."
+    wp core download --allow-root
+fi
 
     # Setup wp-config.php if it doesn't exist
     if [ ! -f wp-config.php ]; then
@@ -26,18 +57,6 @@ if [ ! -f "$FLAG_FILE" ]; then
         sed -i -r "s/localhost/mariadb/" wp-config.php
     fi
 
-    touch "$FLAG_FILE"
-else
-    echo "WordPress already installed, skipping setup."
-fi
-
-# Ensure wp-cli is installed (download if missing)
-if ! command -v wp >/dev/null 2>&1; then
-    echo "* Downloading wp-cli..."
-    wget -q https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-    chmod +x wp-cli.phar
-    mv wp-cli.phar /usr/local/bin/wp
-fi
 
 # Wait for MariaDB to accept connections with correct credentials
 echo "Waiting for MariaDB to be ready..."
@@ -71,13 +90,13 @@ else
     echo "User $WP_USER already exists."
 fi
 
-# Change PHP-FPM listen port if not already changed
-PHP_FPM_CONF="/etc/php/7.3/fpm/pool.d/www.conf"
-if ! grep -q "listen = 9000" "$PHP_FPM_CONF"; then
-    sed -i 's|listen = /run/php/php7.3-fpm.sock|listen = 9000|g' "$PHP_FPM_CONF"
-fi
+# # Change PHP-FPM listen port if not already changed
+# PHP_FPM_CONF="/etc/php/8.2/fpm/pool.d/www.conf"
+# if ! grep -q "listen = 9000" "$PHP_FPM_CONF"; then
+#     sed -i 's|listen = /run/php/php8.2-fpm.sock|listen = 9000|g' "$PHP_FPM_CONF"
+# fi
 
-mkdir -p /run/php
+# mkdir -p /run/php
 
 # Run PHP-FPM in foreground
-exec /usr/sbin/php-fpm7.3 -F
+exec php-fpm
