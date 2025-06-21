@@ -1,0 +1,24 @@
+---
+  - name: Ensure directory wordpress exists
+    file:
+      path: /inception/srcs/requirements/wordpress/tools
+      state: directory
+      mode: '0755'
+
+
+  - name: copy wordpress script
+    copy:
+      src: ../tools/script.sh
+      dest: /inception/srcs/requirements/wordpress/tools
+      mode: '0755'
+
+  - name: copy wordpress dockerfile
+    copy:
+      src: Dockerfile
+      dest: /inception/srcs/requirements/wordpress
+      mode: '0644'
+    
+  - name: build wordpress image
+    community.docker.docker_image_build:
+      name: wordpress:latest
+      path: /inception/srcs/requirements/wordpress

@@ -1,0 +1,18 @@
+---
+  - name: Ensure directory database exists
+    file:
+      path: /inception/srcs/requirements/mariadb
+      state: directory
+      mode: '0755'
+  
+  - name: copy database dockerfile
+    copy:
+      src: ../Dockerfile
+      dest: /inception/srcs/requirements/mariadb
+      mode: '0644'
+    
+  - name: build mariadb image
+    community.docker.docker_image_build:
+      name: mariadb:latest
+      path: /inception/srcs/requirements/mariadb
+      

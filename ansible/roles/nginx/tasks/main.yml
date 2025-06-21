@@ -1,0 +1,23 @@
+---
+  - name: Ensure directory nginx exists
+    file:
+      path: /inception/srcs/requirements/nginx/conf
+      state: directory
+      mode: '0755'
+
+  - name: copy nginx script
+    copy:
+      src: ../conf/nginx.conf
+      dest: /inception/srcs/requirements/nginx/conf
+      mode: '0755'
+  
+  - name: copy nginx dockerfile
+    copy:
+      src: ../Dockerfile
+      dest: /inception/srcs/requirements/nginx
+      mode: '0644'
+
+  - name: build nginx image
+    community.docker.docker_image_build:
+      name: nginx:latest
+      path: /inception/srcs/requirements/nginx

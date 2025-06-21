@@ -1,7 +1,4 @@
-- name: deploy app
-  hosts: deploy
-  become: true
-  tasks:
+---
     - name: Ensure apt cache is up to date
       apt:
         update_cache: true
@@ -36,30 +33,3 @@
         name: docker
         state: started
         enabled: true
----
-    - name: Copy dir inception
-      tags: copy
-      copy:
-        src: ../inception/
-        dest: /tmp/inception/
-
-    - name: create directory database
-      file:
-        path: /tmp/inception/srcs/data/DB
-        state: directory
-        mode: '0755'
-    
-    - name: create dir wordpress
-      file:
-        path: /tmp/inception/srcs/data/Wordpress
-        state: directory
-        mode: '0755'
-
-    - name: Run docker compose
-      command: docker compose up -d
-      args:
-        chdir: /tmp/inception/srcs
-
-
-# docker, database, application, webserver, orchestration,
-

@@ -1,0 +1,21 @@
+- name: create a role to run docker compose
+  hosts: virtual 
+  become: true
+  vars_files:
+    - ./vars/commun.yml
+    - ./vars/vault.yml
+  roles:
+    # - role: docker
+    #   tags: docker
+    # - role: mariadb
+    #   tags: mariadb
+    # - role: wordpress
+    #   tags: wordpress
+    # - role: nginx
+    #   tags: nginx
+    - role: orchestration
+      tags: orchestration
+  tasks:
+    - name: ping
+      ping:
+      register: ping_result

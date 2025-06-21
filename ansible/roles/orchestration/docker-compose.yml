@@ -1,0 +1,50 @@
+
+volumes:
+  wp:
+    name: Wordpress
+    driver: local
+    driver_opts:
+      device : /data/Wordpress
+      o : bind
+      type : none
+  db:
+    name: DB
+    driver: local
+    driver_opts:
+      device : /data/DB
+      o : bind
+      type : none
+
+services:
+  mariadb:
+    build: requirements/mariadb/.
+    container_name: mariadb
+    env_file:
+      - .env
+    volumes:
+      - db:/var/lib/mysql
+    restart: on-failure
+  wordpress:
+    build: requirements/wordpress/.
+    container_name: wordpress
+    volumes:
+      - wp:/var/www/html
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+    restart: on-failure
+  nginx:
+    build: requirements/nginx/.
+    container_name: nginx
+    ports:
+      - 443:443
+    depends_on:
+      - wordpress
+    env_file:
+      - .env
+    volumes:
+      - wp:/var/www/html
+    restart: on-failure
+
+  
