@@ -24,7 +24,7 @@
       mode: '0755'
   
   - name: orchestration[5] Run docker compose
-    command: docker compose -f /inception/srcs/docker-compose.yml up -d
+    command: docker compose -f /inception/srcs/docker-compose.yml up -d --build
     args:
       chdir: /inception/srcs
     register: docker_compose_output
@@ -34,4 +34,3 @@
   - name: orchestration[6] debug docker compose output
     debug:
       var: docker_compose_output.stdout_lines
-    when: docker_compose_output is defined and docker_compose_output.stdout_lines is defined

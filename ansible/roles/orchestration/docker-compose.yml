@@ -17,6 +17,7 @@ volumes:
 
 services:
   mariadb:
+    image: mariadb:latest
     build: requirements/mariadb/.
     container_name: mariadb
     env_file:
@@ -25,6 +26,7 @@ services:
       - db:/var/lib/mysql
     restart: on-failure
   wordpress:
+    image: wordpress:latest
     build: requirements/wordpress/.
     container_name: wordpress
     volumes:
@@ -35,10 +37,12 @@ services:
       - .env
     restart: on-failure
   nginx:
+    image: nginx:latest
     build: requirements/nginx/.
     container_name: nginx
     ports:
       - 443:443
+      - 80:80
     depends_on:
       - wordpress
     env_file:

@@ -8,4 +8,4 @@ RUN apk update && \
 
 COPY ./conf/nginx.conf /etc/nginx
 
-EXPOSE	443
+EXPOSE	80 443

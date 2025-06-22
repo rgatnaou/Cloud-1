@@ -4,6 +4,8 @@ set -e
 WWW_DIR=/var/www/html
 cd "$WWW_DIR"
 
+export HTTP_HOST=$DOMAIN_NAME
+
 # Install wp-cli if missing
 if ! command -v wp >/dev/null 2>&1; then
     echo "Downloading wp-cli..."
@@ -30,7 +32,7 @@ fi
 
 # Wait for MariaDB to be ready
 echo "Waiting for MariaDB..."
-until mysql -h mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" --ssl=0 -e "SELECT 1"; do
+until mariadb -h mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" --ssl=0 -e "SELECT 1" &>/dev/null; do
   echo "MariaDB not ready, retrying in 5s..."
   sleep 5
 done

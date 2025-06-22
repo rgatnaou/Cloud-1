@@ -1,18 +1,18 @@
 - name: create a role to run docker compose
-  hosts: virtual 
+  hosts: deploy 
   become: true
   vars_files:
     - ./vars/commun.yml
     - ./vars/vault.yml
   roles:
-    # - role: docker
-    #   tags: docker
-    # - role: mariadb
-    #   tags: mariadb
-    # - role: wordpress
-    #   tags: wordpress
-    # - role: nginx
-    #   tags: nginx
+    - role: docker
+      tags: docker
+    - role: mariadb
+      tags: mariadb
+    - role: wordpress
+      tags: wordpress
+    - role: nginx
+      tags: nginx
     - role: orchestration
       tags: orchestration
   tasks:

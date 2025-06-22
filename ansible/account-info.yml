@@ -22,4 +22,3 @@
       copy:
         content: "{{ droplet_ip }}"
         dest: "./droplet_ip.txt"
-      when: droplet_ip is defined

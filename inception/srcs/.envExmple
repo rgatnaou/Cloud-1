@@ -15,7 +15,7 @@ TITLE=inception
 
     # wp user
     WP_USER=redouane
-    WP_PASS=12345
+    WP_PASS=12345q
     WP_EMAIL=redouane@gmail.com
 
 
