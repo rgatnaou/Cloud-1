@@ -4,6 +4,7 @@ This project uses **Ansible** to automate the deployment of a full web stack usi
 It includes roles for setting up Docker, MariaDB, WordPress, Nginx, and orchestration logic.
 
 ## 📁 Directory Structure
+```
 ├── roles/
 │ ├── docker/
 │ ├── mariadb/
@@ -16,6 +17,7 @@ It includes roles for setting up Docker, MariaDB, WordPress, Nginx, and orchestr
 ├── roles.yml
 ├── invintory.ini
 └── README.md
+```
 
 ## 🚀 How It Works
 
