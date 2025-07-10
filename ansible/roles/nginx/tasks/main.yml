@@ -19,8 +19,6 @@
       mode: '0644'
 
   - name: build nginx image
-    community.docker.docker_image_build:
-      name: nginx:latest
-      path: /inception/srcs/requirements/nginx
+    command: docker build -t nginx:latest /inception/srcs/requirements/nginx
 
 

@@ -6,30 +6,11 @@
     - name: Install prerequisite packages
       apt:
         name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - software-properties-common
-        state: present
-
-    - name: Add Docker GPG key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Add Docker repository
-      apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
-        state: present
-        update_cache: true
-
-    - name: Install Docker
-      apt:
-        name: docker-ce
-        state: present
-
-    - name: Ensure Docker service is running
-      service:
-        name: docker
-        state: started
-        enabled: true
+          - docker.io
+          - docker-compose
+          
+    - name: Add the domain name to DuckDNS
+      ansible.builtin.uri:
+        url: "https://www.duckdns.org/update?domains={{ DOMAIN_NAME }}&token={{ TOKEN }}"
+        method: GET
+        return_content: yes

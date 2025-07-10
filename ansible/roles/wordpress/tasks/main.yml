@@ -19,6 +19,5 @@
       mode: '0644'
     
   - name: build wordpress image
-    community.docker.docker_image_build:
-      name: wordpress:latest
-      path: /inception/srcs/requirements/wordpress
+    command: docker build -t wordpress:latest /inception/srcs/requirements/wordpress
+

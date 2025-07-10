@@ -24,7 +24,7 @@
       mode: '0755'
   
   - name: orchestration[5] Run docker compose
-    command: docker compose -f /inception/srcs/docker-compose.yml up -d --build
+    command: docker-compose -f /inception/srcs/docker-compose.yml up -d --build
     args:
       chdir: /inception/srcs
     register: docker_compose_output

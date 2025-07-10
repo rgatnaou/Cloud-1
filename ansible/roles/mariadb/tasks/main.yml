@@ -11,11 +11,8 @@
       dest: /inception/srcs/requirements/mariadb
       mode: '0644'
 
-    
   - name: build mariadb image
-    community.docker.docker_image_build:
-      name: mariadb:latest
-      path: /inception/srcs/requirements/mariadb
+    command: docker build -t mariadb:latest /inception/srcs/requirements/mariadb
 
 
       
