@@ -24,7 +24,7 @@ services:
       - .env
     volumes:
       - db:/var/lib/mysql
-    restart: on-failure
+    restart: always
   wordpress:
     image: wordpress:latest
     build: requirements/wordpress/.
@@ -35,7 +35,7 @@ services:
       - mariadb
     env_file:
       - .env
-    restart: on-failure
+    restart: always
   nginx:
     image: nginx:latest
     build: requirements/nginx/.
@@ -49,6 +49,28 @@ services:
       - .env
     volumes:
       - wp:/var/www/html
-    restart: on-failure
+    restart: always
 
-  
+  # phpmyadmin:
+  #   image: phpmyadmin:latest
+  #   container_name: phpmyadmin
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - mariadb
+  #   environment:
+  #     PMA_HOST: mariadb
+  #     MYSQL_ROOT_PASSWORD: 1234
+  #     PMA_ABSOLUTE_URI: http://cloud-1badr.duckdns.org/phpmyadmin
+  #   restart: always
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    depends_on:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_ABSOLUTE_URI: http://cloud-1badr.duckdns.org/phpmyadmin
+    restart: always
+
+

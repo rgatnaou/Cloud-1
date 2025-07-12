@@ -25,3 +25,15 @@ variable "ssh_key_id" {
   type        = string
   sensitive   = true
 }
+
+variable "pub_key" {
+  description = "Path to the SSH private key"
+  type        = string
+  default     = "/home/rgatnaou/.ssh/id_rsa.pub"
+}
+
+variable "pvt_key" {
+  description = "Path to the SSH private key"
+  type        = string
+  default     = "/home/rgatnaou/.ssh/id_rsa"
+}

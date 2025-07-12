@@ -4,27 +4,29 @@ volumes:
     name: Wordpress
     driver: local
     driver_opts:
-      device : ./data/Wordpress
+      device : /data/Wordpress
       o : bind
       type : none
   db:
     name: DB
     driver: local
     driver_opts:
-      device : ./data/DB
+      device : /data/DB
       o : bind
       type : none
 
 services:
   mariadb:
+    image: mariadb:latest
     build: requirements/mariadb/.
     container_name: mariadb
     env_file:
       - .env
     volumes:
       - db:/var/lib/mysql
-    restart: on-failure
+    restart: always
   wordpress:
+    image: wordpress:latest
     build: requirements/wordpress/.
     container_name: wordpress
     volumes:
@@ -33,18 +35,43 @@ services:
       - mariadb
     env_file:
       - .env
-    restart: on-failure
+    restart: always
   nginx:
+    image: nginx:latest
     build: requirements/nginx/.
     container_name: nginx
     ports:
       - 443:443
+      - 80:80
     depends_on:
       - wordpress
     env_file:
       - .env
     volumes:
       - wp:/var/www/html
-    restart: on-failure
+    restart: always
 
-  
+  # phpmyadmin:
+  #   image: phpmyadmin:latest
+  #   container_name: phpmyadmin
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - mariadb
+  #   environment:
+  #     PMA_HOST: mariadb
+  #     MYSQL_ROOT_PASSWORD: 1234
+  #     PMA_ABSOLUTE_URI: http://cloud-1badr.duckdns.org/phpmyadmin
+  #   restart: always
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    depends_on:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_ABSOLUTE_URI: http://cloud-1badr.duckdns.org/phpmyadmin
+      PMA_ROOT_PASSWORD: 1234
+    restart: always
+
+

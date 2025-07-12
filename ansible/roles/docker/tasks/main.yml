@@ -10,7 +10,8 @@
           - docker-compose
           
     - name: Add the domain name to DuckDNS
+      tags: duckdns
       ansible.builtin.uri:
         url: "https://www.duckdns.org/update?domains={{ DOMAIN_NAME }}&token={{ TOKEN }}"
         method: GET
-        return_content: yes
+        

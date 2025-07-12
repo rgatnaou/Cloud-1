@@ -1,29 +1,34 @@
 ---
   - name: orchestration[1] copy docker compose file
+    tags: orchestration
     copy:
       src: ../docker-compose.yml
       dest: /inception/srcs/docker-compose.yml
       mode: '0644'
 
   - name: orchestration[2] copy env file
+    tags: orchestration
     template:
       src: ../env.j2
       dest: /inception/srcs/.env
       mode: '0644'
 
   - name: orchestration[3] create directory database
+    tags: orchestration
     file: 
       path: /data/DB
       state: directory
       mode: '0755'
   
   - name: orchestration[4] create dir wordpress
+    tags: orchestration
     file: 
       path: /data/Wordpress
       state: directory
       mode: '0755'
   
   - name: orchestration[5] Run docker compose
+    tags: orchestration
     command: docker-compose -f /inception/srcs/docker-compose.yml up -d --build
     args:
       chdir: /inception/srcs
@@ -32,5 +37,6 @@
 
 
   - name: orchestration[6] debug docker compose output
+    tags: orchestration
     debug:
       var: docker_compose_output.stdout_lines

@@ -1,5 +1,5 @@
 - name: create a role to run docker compose
-  hosts: deploy 
+  hosts: all 
   become: true
   vars_files:
     - ./vars/commun.yml
