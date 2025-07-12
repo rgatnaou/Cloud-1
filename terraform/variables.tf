@@ -12,12 +12,12 @@ variable "nb_vms" {
 
 variable "ssh_private_key" {
   type    = string
-  default = "/home/babkar/.ssh/gcp"
+  default = "/home/rgatnaou/.ssh/gcp"
 }
 
 variable "ssh_public_key" {
   type    = string
-  default = "/home/babkar/.ssh/gcp.pub"
+  default = "/home/rgatnaou/.ssh/gcp.pub"
 }
 
 

@@ -32,11 +32,4 @@
     command: docker-compose -f /inception/srcs/docker-compose.yml up -d --build
     args:
       chdir: /inception/srcs
-    register: docker_compose_output
     ignore_errors: true
-
-
-  - name: orchestration[6] debug docker compose output
-    tags: orchestration
-    debug:
-      var: docker_compose_output.stdout_lines

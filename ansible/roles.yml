@@ -15,7 +15,3 @@
       tags: nginx
     - role: orchestration
       tags: orchestration
-  tasks:
-    - name: ping
-      ping:
-      register: ping_result
