@@ -10,7 +10,7 @@ resource "google_compute_instance" "cloud" {
   count        = var.nb_vms
   name         = "vm-${count.index}"
   zone         = "us-central1-a"
-  machine_type = "e2-highcpu-4"
+  machine_type = "e2-medium"
 
   tags = ["vms"]
 

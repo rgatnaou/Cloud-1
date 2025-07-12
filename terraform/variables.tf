@@ -7,7 +7,7 @@ variable "region" {
 }
 
 variable "nb_vms" {
-  default = 1
+  default = 3
 }
 
 variable "ssh_private_key" {

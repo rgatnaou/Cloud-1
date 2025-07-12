@@ -2,7 +2,6 @@
   hosts: all 
   become: true
   vars_files:
-    - ./vars/commun.yml
     - ./vars/vault.yml
   roles:
     - role: docker

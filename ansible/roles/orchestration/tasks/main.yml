@@ -8,8 +8,8 @@
 
   - name: orchestration[2] copy env file
     tags: orchestration
-    template:
-      src: ../env.j2
+    copy:
+      src: ../../vars/.env
       dest: /inception/srcs/.env
       mode: '0644'
 
