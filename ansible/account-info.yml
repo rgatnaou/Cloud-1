@@ -1,8 +1,0 @@
----
-- name: Account info
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  tasks:
-    - name: Get account information
-      digitalocean.cloud.account_info:
