@@ -4,12 +4,7 @@ terraform {
       source  = "hashicorp/google"
       version = "6.41.0"
     }
-    ansible = {
-      source  = "ansible/ansible"
-      version = "1.3.0"
-    }
   }
-
 }
 
 provider "google" {
@@ -17,7 +12,4 @@ provider "google" {
   region  = var.region
 }
 
-provider "ansible" {
-  # Configuration options
-}
 
